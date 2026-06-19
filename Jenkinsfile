@@ -43,10 +43,41 @@ pipeline {
             sh "docker logout"
         }
         success {
-            echo "Pipeline completed successfully! Todo app deployed."
+            mail to: 'piyush.work45@gmail.com',
+                 subject: "✅ BUILD #${BUILD_NUMBER} SUCCESS — todo-app-pipeline",
+                 body: """
+Hello Piyush,
+
+Build #${BUILD_NUMBER} successfully completed!
+
+Job      : ${JOB_NAME}
+Build    : #${BUILD_NUMBER}
+Status   : SUCCESS
+Image    : piyush4536/todo-app:${BUILD_NUMBER}
+Live URL : http://192.168.174.128:30070
+
+Check details: ${BUILD_URL}
+
+— Jenkins
+                 """
         }
         failure {
-            echo "Pipeline failed. Check logs above."
+            mail to: 'piyush.work45@gmail.com',
+                 subject: "❌ BUILD #${BUILD_NUMBER} FAILED — todo-app-pipeline",
+                 body: """
+Hello Piyush,
+
+Build #${BUILD_NUMBER} FAILED!
+
+Job      : ${JOB_NAME}
+Build    : #${BUILD_NUMBER}
+Status   : FAILED
+
+Check console output for details:
+${BUILD_URL}console
+
+— Jenkins
+                 """
         }
     }
 }
