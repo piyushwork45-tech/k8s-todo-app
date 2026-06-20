@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-creds')
+        DISCORD_WEBHOOK = credentials('discord-webhook')
         IMAGE_NAME = "piyush4536/todo-app"
         IMAGE_TAG = "${BUILD_NUMBER}"
     }
@@ -43,7 +44,7 @@ pipeline {
             sh "docker logout"
         }
         success {
-            mail to: 'piyush.test36@gmail.com',
+            mail to: 'piyush.work45@gmail.com',
                  subject: "✅ BUILD #${BUILD_NUMBER} SUCCESS — todo-app-pipeline",
                  body: """
 Hello Piyush,
@@ -60,6 +61,18 @@ Check details: ${BUILD_URL}
 
 — Jenkins
                  """
+
+            sh """
+                curl -s -X POST "$DISCORD_WEBHOOK" \
+                -H "Content-Type: application/json" \
+                -d '{
+                    "embeds": [{
+                        "title": "✅ Build #${BUILD_NUMBER} SUCCESS",
+                        "description": "**Job:** ${JOB_NAME}\\n**Image:** piyush4536/todo-app:${BUILD_NUMBER}\\n**Live URL:** http://192.168.174.128:30070",
+                        "color": 3066993
+                    }]
+                }'
+            """
         }
         failure {
             mail to: 'piyush.work45@gmail.com',
@@ -73,11 +86,23 @@ Job      : ${JOB_NAME}
 Build    : #${BUILD_NUMBER}
 Status   : FAILED
 
-Check console output for details:
+Check console output:
 ${BUILD_URL}console
 
 — Jenkins
                  """
+
+            sh """
+                curl -s -X POST "$DISCORD_WEBHOOK" \
+                -H "Content-Type: application/json" \
+                -d '{
+                    "embeds": [{
+                        "title": "❌ Build #${BUILD_NUMBER} FAILED",
+                        "description": "**Job:** ${JOB_NAME}\\n**Build:** #${BUILD_NUMBER}\\n**Check logs:** ${BUILD_URL}console",
+                        "color": 15158332
+                    }]
+                }'
+            """
         }
     }
 }
