@@ -59,7 +59,7 @@ pipeline {
             }
         }
         success {
-            mail to: 'piyush.work45@gmail.com',
+            mail to: 'piyush.test36@gmail.com',
                  subject: "✅ BUILD #${BUILD_NUMBER} SUCCESS — todo-app-pipeline",
                  body: """
 Hello Piyush,
