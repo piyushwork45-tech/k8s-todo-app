@@ -45,7 +45,7 @@ pipeline {
                 sh "kubectl set image deployment/todo-app todo-app=${IMAGE_NAME}:${IMAGE_TAG}"
                 sh "kubectl rollout status deployment/todo-app"
                 script {
-                    env.POD_STATUS = sh(script: "kubectl get pods -l app=todo-app --no-headers | awk '{print \$1\": \"\$2}' | tr '\\n' ', '", returnStdout: true).trim()
+                    env.POD_STATUS = sh(script: "kubectl get pods -l app=todo-app --no-headers | awk '{print \$1\": \"\$2}' | paste -sd ',' -", returnStdout: true).trim()
                 }
             }
         }
@@ -55,8 +55,7 @@ pipeline {
         always {
             sh "docker logout"
             script {
-                def duration = currentBuild.durationString.replace(' and counting', '')
-                env.BUILD_DURATION = duration
+                env.BUILD_DURATION = currentBuild.durationString.replace(' and counting', '')
             }
         }
         success {
@@ -81,28 +80,24 @@ Check details: ${BUILD_URL}
 — Jenkins
                  """
 
-            sh """
-                curl -s -X POST "$DISCORD_WEBHOOK" \
-                -H "Content-Type: application/json" \
-                -d '{
-                    "embeds": [{
-                        "title": "✅ Build #${BUILD_NUMBER} SUCCESS",
-                        "color": 3066993,
-                        "fields": [
-                            {"name": "📦 Job", "value": "${JOB_NAME}", "inline": true},
-                            {"name": "⏱ Duration", "value": "${env.BUILD_DURATION}", "inline": true},
-                            {"name": "🏷 Image Tag", "value": "${BUILD_NUMBER}", "inline": true},
-                            {"name": "👤 Author", "value": "${env.GIT_AUTHOR}", "inline": true},
-                            {"name": "🔖 Commit", "value": "${env.GIT_COMMIT_SHORT}", "inline": true},
-                            {"name": "💬 Message", "value": "${env.GIT_MESSAGE}", "inline": false},
-                            {"name": "🌐 Live URL", "value": "http://192.168.174.128:30070", "inline": false},
-                            {"name": "🟢 Pods", "value": "${env.POD_STATUS}", "inline": false}
-                        ],
-                        "footer": {"text": "Jenkins CI/CD Pipeline"},
-                        "timestamp": "'$(date -u +%Y-%m-%dT%H:%M:%S)'"
-                    }]
-                }'
-            """
+            writeFile file: 'discord_payload.json', text: """{
+  "embeds": [{
+    "title": "Build #${BUILD_NUMBER} SUCCESS",
+    "color": 3066993,
+    "fields": [
+      {"name": "Job", "value": "${JOB_NAME}", "inline": true},
+      {"name": "Duration", "value": "${env.BUILD_DURATION}", "inline": true},
+      {"name": "Image Tag", "value": "${BUILD_NUMBER}", "inline": true},
+      {"name": "Author", "value": "${env.GIT_AUTHOR}", "inline": true},
+      {"name": "Commit", "value": "${env.GIT_COMMIT_SHORT}", "inline": true},
+      {"name": "Message", "value": "${env.GIT_MESSAGE}", "inline": false},
+      {"name": "Live URL", "value": "http://192.168.174.128:30070", "inline": false},
+      {"name": "Pods", "value": "${env.POD_STATUS}", "inline": false}
+    ],
+    "footer": {"text": "Jenkins CI/CD Pipeline"}
+  }]
+}"""
+            sh 'curl -s -X POST "$DISCORD_WEBHOOK" -H "Content-Type: application/json" -d @discord_payload.json'
         }
         failure {
             mail to: 'piyush.work45@gmail.com',
@@ -124,26 +119,22 @@ ${BUILD_URL}console
 — Jenkins
                  """
 
-            sh """
-                curl -s -X POST "$DISCORD_WEBHOOK" \
-                -H "Content-Type: application/json" \
-                -d '{
-                    "embeds": [{
-                        "title": "❌ Build #${BUILD_NUMBER} FAILED",
-                        "color": 15158332,
-                        "fields": [
-                            {"name": "📦 Job", "value": "${JOB_NAME}", "inline": true},
-                            {"name": "⏱ Duration", "value": "${env.BUILD_DURATION}", "inline": true},
-                            {"name": "👤 Author", "value": "${env.GIT_AUTHOR}", "inline": true},
-                            {"name": "🔖 Commit", "value": "${env.GIT_COMMIT_SHORT}", "inline": true},
-                            {"name": "💬 Message", "value": "${env.GIT_MESSAGE}", "inline": false},
-                            {"name": "📋 Check Logs", "value": "${BUILD_URL}console", "inline": false}
-                        ],
-                        "footer": {"text": "Jenkins CI/CD Pipeline"},
-                        "timestamp": "'$(date -u +%Y-%m-%dT%H:%M:%S)'"
-                    }]
-                }'
-            """
+            writeFile file: 'discord_payload.json', text: """{
+  "embeds": [{
+    "title": "Build #${BUILD_NUMBER} FAILED",
+    "color": 15158332,
+    "fields": [
+      {"name": "Job", "value": "${JOB_NAME}", "inline": true},
+      {"name": "Duration", "value": "${env.BUILD_DURATION}", "inline": true},
+      {"name": "Author", "value": "${env.GIT_AUTHOR}", "inline": true},
+      {"name": "Commit", "value": "${env.GIT_COMMIT_SHORT}", "inline": true},
+      {"name": "Message", "value": "${env.GIT_MESSAGE}", "inline": false},
+      {"name": "Check Logs", "value": "${BUILD_URL}console", "inline": false}
+    ],
+    "footer": {"text": "Jenkins CI/CD Pipeline"}
+  }]
+}"""
+            sh 'curl -s -X POST "$DISCORD_WEBHOOK" -H "Content-Type: application/json" -d @discord_payload.json'
         }
     }
 }
