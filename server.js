@@ -7,54 +7,51 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// In-memory store
 let todos = [];
 let nextId = 1;
 
-// Health check - useful for Kubernetes liveness/readiness probes
 app.get('/health', (req, res) => {
   res.status(200).json({ status: 'ok' });
 });
 
-// Get all todos
 app.get('/api/todos', (req, res) => {
   res.json(todos);
 });
 
-// Add a new todo
 app.post('/api/todos', (req, res) => {
-  const { text } = req.body;
+  const { text, priority, dueDate, category } = req.body;
   if (!text || !text.trim()) {
     return res.status(400).json({ error: 'Text is required' });
   }
-  const todo = { id: nextId++, text: text.trim(), done: false };
+  const todo = {
+    id: nextId++,
+    text: text.trim(),
+    done: false,
+    priority: priority || 'medium',
+    dueDate: dueDate || null,
+    category: category || 'General',
+    createdAt: new Date().toISOString()
+  };
   todos.push(todo);
   res.status(201).json(todo);
 });
 
-// Toggle complete / update a todo
 app.put('/api/todos/:id', (req, res) => {
   const id = parseInt(req.params.id, 10);
   const todo = todos.find(t => t.id === id);
-  if (!todo) {
-    return res.status(404).json({ error: 'Todo not found' });
-  }
-  if (typeof req.body.done === 'boolean') {
-    todo.done = req.body.done;
-  }
-  if (typeof req.body.text === 'string') {
-    todo.text = req.body.text.trim();
-  }
+  if (!todo) return res.status(404).json({ error: 'Todo not found' });
+  if (typeof req.body.done === 'boolean') todo.done = req.body.done;
+  if (req.body.text) todo.text = req.body.text.trim();
+  if (req.body.priority) todo.priority = req.body.priority;
+  if (req.body.dueDate !== undefined) todo.dueDate = req.body.dueDate;
+  if (req.body.category) todo.category = req.body.category;
   res.json(todo);
 });
 
-// Delete a todo
 app.delete('/api/todos/:id', (req, res) => {
   const id = parseInt(req.params.id, 10);
   const index = todos.findIndex(t => t.id === id);
-  if (index === -1) {
-    return res.status(404).json({ error: 'Todo not found' });
-  }
+  if (index === -1) return res.status(404).json({ error: 'Todo not found' });
   todos.splice(index, 1);
   res.status(204).send();
 });
