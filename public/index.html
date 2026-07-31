@@ -8,244 +8,270 @@
 
   body {
     min-height: 100vh;
-    background: #0f0f1a;
+    background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 50%, #d4fc79 100%);
     font-family: 'Segoe UI', Arial, sans-serif;
     padding: 20px;
-    color: white;
+    color: #2d2d2d;
+  }
+
+  .container {
+    max-width: 650px;
+    margin: 0 auto;
   }
 
   .header {
     text-align: center;
-    padding: 30px 0 20px;
+    padding: 30px 0 24px;
   }
 
   .header h1 {
-    font-size: 2.2rem;
-    background: linear-gradient(135deg, #f093fb, #f5576c, #4facfe);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: #fff;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.15);
     margin-bottom: 6px;
+    letter-spacing: -0.5px;
   }
 
   .header p {
-    color: rgba(255,255,255,0.5);
+    color: rgba(255,255,255,0.8);
     font-size: 0.85rem;
+    font-weight: 500;
+  }
+
+  .glass {
+    background: rgba(255,255,255,0.25);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.45);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(31,38,135,0.1);
   }
 
   .stats-row {
-    display: flex;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
     gap: 12px;
-    margin: 20px 0;
-    flex-wrap: wrap;
+    margin-bottom: 16px;
   }
 
   .stat-card {
-    background: rgba(255,255,255,0.07);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 14px;
-    padding: 12px 24px;
+    padding: 14px 10px;
     text-align: center;
-    min-width: 90px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.3);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.5);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
   }
 
-  .stat-card .num { font-size: 1.6rem; font-weight: bold; }
-  .stat-card .label { font-size: 0.75rem; color: rgba(255,255,255,0.5); margin-top: 2px; }
-  .stat-card.total .num { color: #4facfe; }
-  .stat-card.done .num { color: #43e97b; }
-  .stat-card.pending .num { color: #f093fb; }
-  .stat-card.high .num { color: #f5576c; }
+  .stat-card .num {
+    font-size: 1.8rem;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-card .label {
+    font-size: 0.72rem;
+    color: rgba(0,0,0,0.5);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .stat-card.total .num { color: #6c63ff; }
+  .stat-card.done .num { color: #00b894; }
+  .stat-card.pending .num { color: #e17055; }
+  .stat-card.high .num { color: #d63031; }
 
   .add-section {
-    max-width: 700px;
-    margin: 0 auto 30px;
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 20px;
-    padding: 20px;
+    padding: 22px;
+    margin-bottom: 16px;
   }
 
-  .add-section h3 {
-    font-size: 0.9rem;
-    color: rgba(255,255,255,0.6);
-    margin-bottom: 14px;
+  .section-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: rgba(0,0,0,0.45);
     text-transform: uppercase;
     letter-spacing: 1px;
+    margin-bottom: 14px;
   }
-
-  .input-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-bottom: 10px;
-  }
-
-  .input-grid input, .input-grid select {
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.15);
-    border-radius: 10px;
-    padding: 10px 14px;
-    color: white;
-    font-size: 14px;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-
-  .input-grid input:focus, .input-grid select:focus {
-    border-color: #4facfe;
-  }
-
-  .input-grid select option { background: #1a1a2e; }
 
   .task-input-row {
     display: flex;
     gap: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
   }
 
   .task-input-row input {
     flex: 1;
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.15);
-    border-radius: 10px;
-    padding: 12px 16px;
-    color: white;
+    padding: 13px 16px;
+    border-radius: 12px;
+    border: 1.5px solid rgba(255,255,255,0.6);
+    background: rgba(255,255,255,0.5);
     font-size: 15px;
+    color: #2d2d2d;
     outline: none;
-    transition: border-color 0.2s;
+    transition: all 0.2s;
+    backdrop-filter: blur(10px);
   }
 
-  .task-input-row input:focus { border-color: #4facfe; }
-  .task-input-row input::placeholder { color: rgba(255,255,255,0.3); }
+  .task-input-row input:focus {
+    border-color: #6c63ff;
+    background: rgba(255,255,255,0.7);
+    box-shadow: 0 0 0 3px rgba(108,99,255,0.15);
+  }
+
+  .task-input-row input::placeholder { color: rgba(0,0,0,0.35); }
 
   .add-btn {
-    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    padding: 13px 22px;
+    border-radius: 12px;
     border: none;
-    border-radius: 10px;
-    padding: 12px 24px;
+    background: linear-gradient(135deg, #6c63ff, #a855f7);
     color: white;
     font-size: 15px;
-    font-weight: bold;
+    font-weight: 700;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all 0.25s;
+    box-shadow: 0 4px 15px rgba(108,99,255,0.35);
     white-space: nowrap;
   }
 
   .add-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 20px rgba(79,172,254,0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(108,99,255,0.5);
   }
 
-  .filter-row {
-    max-width: 700px;
-    margin: 0 auto 20px;
+  .meta-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .meta-grid select,
+  .meta-grid input[type="text"],
+  .meta-grid input[type="date"] {
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1.5px solid rgba(255,255,255,0.6);
+    background: rgba(255,255,255,0.5);
+    font-size: 13px;
+    color: #2d2d2d;
+    outline: none;
+    transition: all 0.2s;
+    backdrop-filter: blur(10px);
+    width: 100%;
+  }
+
+  .meta-grid select:focus,
+  .meta-grid input:focus {
+    border-color: #6c63ff;
+    background: rgba(255,255,255,0.7);
+  }
+
+  .meta-grid select option { background: white; color: #2d2d2d; }
+
+  input[type="date"]::-webkit-calendar-picker-indicator { opacity: 0.5; }
+
+  .filter-section {
     display: flex;
     gap: 8px;
+    margin-bottom: 14px;
     flex-wrap: wrap;
   }
 
   .filter-btn {
     padding: 7px 16px;
     border-radius: 20px;
-    border: 1px solid rgba(255,255,255,0.15);
-    background: transparent;
-    color: rgba(255,255,255,0.6);
-    cursor: pointer;
+    border: 1.5px solid rgba(255,255,255,0.5);
+    background: rgba(255,255,255,0.25);
+    backdrop-filter: blur(10px);
+    color: rgba(0,0,0,0.6);
     font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
     transition: all 0.2s;
   }
 
   .filter-btn.active, .filter-btn:hover {
-    background: rgba(255,255,255,0.12);
-    color: white;
-    border-color: rgba(255,255,255,0.3);
+    background: rgba(255,255,255,0.6);
+    border-color: rgba(108,99,255,0.4);
+    color: #6c63ff;
+    box-shadow: 0 2px 10px rgba(108,99,255,0.15);
   }
 
-  .todos-grid {
-    max-width: 700px;
-    margin: 0 auto;
+  .todos-list {
     display: flex;
     flex-direction: column;
     gap: 10px;
   }
 
   .todo-card {
-    border-radius: 16px;
     padding: 16px 18px;
     display: flex;
     align-items: center;
     gap: 14px;
     border-left: 4px solid transparent;
-    transition: all 0.3s;
-    animation: slideIn 0.3s ease;
-    position: relative;
-    overflow: hidden;
+    transition: all 0.25s;
+    animation: fadeIn 0.3s ease;
+    cursor: default;
   }
 
-  @keyframes slideIn {
-    from { opacity: 0; transform: translateY(-8px); }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-6px); }
     to { opacity: 1; transform: translateY(0); }
   }
 
-  .todo-card.priority-high {
-    background: rgba(245, 87, 108, 0.1);
-    border-left-color: #f5576c;
-  }
+  .todo-card:hover { transform: translateX(3px); }
 
-  .todo-card.priority-medium {
-    background: rgba(79, 172, 254, 0.1);
-    border-left-color: #4facfe;
-  }
-
-  .todo-card.priority-low {
-    background: rgba(67, 233, 123, 0.1);
-    border-left-color: #43e97b;
-  }
-
-  .todo-card.done {
-    opacity: 0.5;
-  }
-
-  .todo-card:hover {
-    transform: translateX(4px);
-    filter: brightness(1.1);
-  }
+  .todo-card.priority-high { border-left-color: #d63031; }
+  .todo-card.priority-medium { border-left-color: #6c63ff; }
+  .todo-card.priority-low { border-left-color: #00b894; }
+  .todo-card.done { opacity: 0.55; }
 
   .checkbox {
-    width: 24px;
-    height: 24px;
+    width: 26px;
+    height: 26px;
     border-radius: 50%;
-    border: 2px solid rgba(255,255,255,0.3);
+    border: 2px solid rgba(0,0,0,0.2);
+    background: rgba(255,255,255,0.5);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 14px;
     transition: all 0.2s;
     flex-shrink: 0;
-    font-size: 13px;
   }
 
   .checkbox.checked {
-    background: #43e97b;
-    border-color: #43e97b;
+    background: linear-gradient(135deg, #00b894, #00cec9);
+    border-color: transparent;
+    box-shadow: 0 2px 10px rgba(0,184,148,0.4);
+    color: white;
   }
 
-  .todo-content { flex: 1; }
+  .todo-content { flex: 1; min-width: 0; }
 
   .todo-text {
     font-size: 15px;
+    font-weight: 600;
+    color: #2d2d2d;
     margin-bottom: 6px;
     word-break: break-word;
   }
 
   .todo-card.done .todo-text {
     text-decoration: line-through;
-    color: rgba(255,255,255,0.4);
+    color: rgba(0,0,0,0.35);
   }
 
   .todo-meta {
     display: flex;
-    gap: 8px;
+    gap: 6px;
     flex-wrap: wrap;
     align-items: center;
   }
@@ -254,102 +280,101 @@
     padding: 3px 10px;
     border-radius: 20px;
     font-size: 11px;
-    font-weight: bold;
+    font-weight: 700;
+    letter-spacing: 0.3px;
   }
 
-  .badge.priority-high { background: rgba(245,87,108,0.25); color: #f5576c; }
-  .badge.priority-medium { background: rgba(79,172,254,0.25); color: #4facfe; }
-  .badge.priority-low { background: rgba(67,233,123,0.25); color: #43e97b; }
-  .badge.category { background: rgba(240,147,251,0.2); color: #f093fb; }
-  .badge.due { background: rgba(255,200,100,0.2); color: #ffc864; font-size: 11px; }
-  .badge.overdue { background: rgba(245,87,108,0.3); color: #f5576c; }
+  .badge.high { background: rgba(214,48,49,0.12); color: #d63031; }
+  .badge.medium { background: rgba(108,99,255,0.12); color: #6c63ff; }
+  .badge.low { background: rgba(0,184,148,0.12); color: #00b894; }
+  .badge.category { background: rgba(168,85,247,0.12); color: #a855f7; }
+  .badge.due { background: rgba(253,203,110,0.2); color: #e17055; }
+  .badge.overdue { background: rgba(214,48,49,0.15); color: #d63031; }
 
   .delete-btn {
-    background: rgba(245,87,108,0.15);
-    border: 1px solid rgba(245,87,108,0.3);
-    border-radius: 8px;
     width: 32px;
     height: 32px;
-    color: #f5576c;
+    border-radius: 8px;
+    border: 1.5px solid rgba(214,48,49,0.2);
+    background: rgba(214,48,49,0.08);
+    color: #d63031;
     font-size: 15px;
     cursor: pointer;
-    transition: all 0.2s;
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: all 0.2s;
     flex-shrink: 0;
   }
 
   .delete-btn:hover {
-    background: rgba(245,87,108,0.3);
+    background: rgba(214,48,49,0.18);
     transform: scale(1.1);
   }
 
   .empty {
     text-align: center;
     padding: 50px 0;
-    color: rgba(255,255,255,0.3);
-    font-size: 1rem;
+    color: rgba(0,0,0,0.35);
   }
 
   .empty span { font-size: 3rem; display: block; margin-bottom: 10px; }
-
-  input[type="date"]::-webkit-calendar-picker-indicator {
-    filter: invert(1);
-    opacity: 0.5;
-  }
+  .empty p { font-size: 1rem; font-weight: 500; }
 </style>
 </head>
 <body>
+<div class="container">
 
-<div class="header">
-  <h1>✨ My DevOps Todo App</h1>
-  <p>Built with Node.js • Docker • Kubernetes • Jenkins</p>
+  <div class="header">
+    <h1>✨ My DevOps Todo</h1>
+    <p>Node.js • Docker • Kubernetes • Jenkins</p>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card total">
+      <div class="num" id="totalCount">0</div>
+      <div class="label">Total</div>
+    </div>
+    <div class="stat-card done">
+      <div class="num" id="doneCount">0</div>
+      <div class="label">Done</div>
+    </div>
+    <div class="stat-card pending">
+      <div class="num" id="pendingCount">0</div>
+      <div class="label">Pending</div>
+    </div>
+    <div class="stat-card high">
+      <div class="num" id="highCount">0</div>
+      <div class="label">🔴 High</div>
+    </div>
+  </div>
+
+  <div class="glass add-section">
+    <div class="section-title">Add New Task</div>
+    <div class="task-input-row">
+      <input type="text" id="todoInput" placeholder="What needs to be done?">
+      <button class="add-btn" onclick="addTodo()">+ Add</button>
+    </div>
+    <div class="meta-grid">
+      <select id="priorityInput">
+        <option value="high">🔴 High Priority</option>
+        <option value="medium" selected>🔵 Medium Priority</option>
+        <option value="low">🟢 Low Priority</option>
+      </select>
+      <input type="text" id="categoryInput" placeholder="📁 Category">
+      <input type="date" id="dueDateInput">
+      <select id="filterSelect" onchange="renderTodos()">
+        <option value="all">📋 All Tasks</option>
+        <option value="pending">⏳ Pending</option>
+        <option value="done">✅ Done</option>
+        <option value="high">🔴 High Priority</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="todos-list" id="todoList"></div>
+
 </div>
-
-<div class="stats-row">
-  <div class="stat-card total">
-    <div class="num" id="totalCount">0</div>
-    <div class="label">📋 Total</div>
-  </div>
-  <div class="stat-card done">
-    <div class="num" id="doneCount">0</div>
-    <div class="label">✅ Done</div>
-  </div>
-  <div class="stat-card pending">
-    <div class="num" id="pendingCount">0</div>
-    <div class="label">⏳ Pending</div>
-  </div>
-  <div class="stat-card high">
-    <div class="num" id="highCount">0</div>
-    <div class="label">🔴 High</div>
-  </div>
-</div>
-
-<div class="add-section">
-  <h3>➕ Add New Task</h3>
-  <div class="task-input-row">
-    <input type="text" id="todoInput" placeholder="What needs to be done?">
-    <button class="add-btn" onclick="addTodo()">Add Task</button>
-  </div>
-  <div class="input-grid">
-    <select id="priorityInput">
-      <option value="high">🔴 High Priority</option>
-      <option value="medium" selected>🔵 Medium Priority</option>
-      <option value="low">🟢 Low Priority</option>
-    </select>
-    <input type="text" id="categoryInput" placeholder="📁 Category (e.g. DevOps, Work)">
-    <input type="date" id="dueDateInput">
-    <select id="filterSelect" onchange="renderTodos()">
-      <option value="all">📋 Show All</option>
-      <option value="pending">⏳ Pending Only</option>
-      <option value="done">✅ Done Only</option>
-      <option value="high">🔴 High Priority</option>
-    </select>
-  </div>
-</div>
-
-<div class="todos-grid" id="todoList"></div>
 
 <script>
 let allTodos = [];
@@ -368,39 +393,38 @@ function renderTodos() {
   else if (filter === 'done') todos = todos.filter(t => t.done);
   else if (filter === 'high') todos = todos.filter(t => t.priority === 'high');
 
-  // Sort: high priority first, then by due date
   todos.sort((a, b) => {
-    const pOrder = { high: 0, medium: 1, low: 2 };
-    if (pOrder[a.priority] !== pOrder[b.priority]) return pOrder[a.priority] - pOrder[b.priority];
+    const p = { high: 0, medium: 1, low: 2 };
+    if (p[a.priority] !== p[b.priority]) return p[a.priority] - p[b.priority];
     if (a.dueDate && b.dueDate) return new Date(a.dueDate) - new Date(b.dueDate);
     if (a.dueDate) return -1;
     if (b.dueDate) return 1;
     return 0;
   });
 
-  // Update stats
   document.getElementById('totalCount').textContent = allTodos.length;
   document.getElementById('doneCount').textContent = allTodos.filter(t => t.done).length;
   document.getElementById('pendingCount').textContent = allTodos.filter(t => !t.done).length;
   document.getElementById('highCount').textContent = allTodos.filter(t => t.priority === 'high' && !t.done).length;
 
   const list = document.getElementById('todoList');
+
   if (todos.length === 0) {
-    list.innerHTML = '<div class="empty"><span>🎯</span>No tasks here! Add one above.</div>';
+    list.innerHTML = '<div class="glass empty"><span>🎯</span><p>No tasks here! Add one above.</p></div>';
     return;
   }
 
   list.innerHTML = '';
   todos.forEach(todo => {
     const card = document.createElement('div');
-    card.className = `todo-card priority-${todo.priority} ${todo.done ? 'done' : ''}`;
+    card.className = `glass todo-card priority-${todo.priority} ${todo.done ? 'done' : ''}`;
 
     const today = new Date().toISOString().split('T')[0];
     let dueBadge = '';
     if (todo.dueDate) {
-      const isOverdue = !todo.done && todo.dueDate < today;
-      dueBadge = `<span class="badge ${isOverdue ? 'overdue' : 'due'}">
-        ${isOverdue ? '⚠️ Overdue' : '📅'} ${todo.dueDate}
+      const overdue = !todo.done && todo.dueDate < today;
+      dueBadge = `<span class="badge ${overdue ? 'overdue' : 'due'}">
+        ${overdue ? '⚠️ Overdue' : '📅'} ${todo.dueDate}
       </span>`;
     }
 
@@ -411,7 +435,7 @@ function renderTodos() {
       <div class="todo-content">
         <div class="todo-text">${todo.text}</div>
         <div class="todo-meta">
-          <span class="badge priority-${todo.priority}">${
+          <span class="badge ${todo.priority}">${
             todo.priority === 'high' ? '🔴 High' :
             todo.priority === 'medium' ? '🔵 Medium' : '🟢 Low'
           }</span>
@@ -428,7 +452,6 @@ function renderTodos() {
 async function addTodo() {
   const text = document.getElementById('todoInput').value.trim();
   if (!text) return;
-
   await fetch('/api/todos', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -439,7 +462,6 @@ async function addTodo() {
       dueDate: document.getElementById('dueDateInput').value || null
     })
   });
-
   document.getElementById('todoInput').value = '';
   document.getElementById('dueDateInput').value = '';
   fetchTodos();
