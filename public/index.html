@@ -1,17 +1,53 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <title>My DevOps Todo App</title>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  * { margin: 0; padding: 0; box-sizing: border-box; transition: background 0.3s, color 0.3s; }
+
+  /* Dark theme (default) */
+  [data-theme="dark"] {
+    --bg: #0a0a1a;
+    --text: rgba(255,255,255,0.9);
+    --text-muted: rgba(255,255,255,0.4);
+    --glass-bg: rgba(255,255,255,0.08);
+    --glass-border: rgba(255,255,255,0.15);
+    --glass-hover: rgba(255,255,255,0.12);
+    --input-bg: rgba(255,255,255,0.07);
+    --input-border: rgba(255,255,255,0.12);
+    --input-focus: rgba(192,132,252,0.1);
+    --todo-text: rgba(255,255,255,0.9);
+    --todo-done: rgba(255,255,255,0.3);
+    --shadow: 0 8px 32px rgba(0,0,0,0.3);
+    --toggle-bg: rgba(255,255,255,0.1);
+    --progress-bg: rgba(255,255,255,0.1);
+  }
+
+  /* Light theme */
+  [data-theme="light"] {
+    --bg: #f0f4ff;
+    --text: #1a1a2e;
+    --text-muted: rgba(0,0,0,0.45);
+    --glass-bg: rgba(255,255,255,0.45);
+    --glass-border: rgba(255,255,255,0.7);
+    --glass-hover: rgba(255,255,255,0.65);
+    --input-bg: rgba(255,255,255,0.6);
+    --input-border: rgba(0,0,0,0.1);
+    --input-focus: rgba(108,99,255,0.08);
+    --todo-text: #1a1a2e;
+    --todo-done: rgba(0,0,0,0.3);
+    --shadow: 0 8px 32px rgba(0,0,0,0.1);
+    --toggle-bg: rgba(0,0,0,0.08);
+    --progress-bg: rgba(0,0,0,0.08);
+  }
 
   body {
     min-height: 100vh;
-    background: #0a0a1a;
+    background: var(--bg);
     font-family: 'Segoe UI', Arial, sans-serif;
     padding: 30px 20px;
-    color: #2d2d2d;
+    color: var(--text);
     overflow-x: hidden;
     position: relative;
   }
@@ -21,39 +57,19 @@
     position: fixed;
     border-radius: 50%;
     filter: blur(80px);
-    opacity: 0.6;
+    opacity: 0.55;
     animation: blobFloat 8s ease-in-out infinite;
     z-index: 0;
     pointer-events: none;
+    transition: opacity 0.3s;
   }
 
-  .blob1 {
-    width: 500px; height: 500px;
-    background: radial-gradient(circle, #c084fc, #818cf8);
-    top: -100px; left: -100px;
-    animation-delay: 0s;
-  }
+  [data-theme="light"] .blob { opacity: 0.35; }
 
-  .blob2 {
-    width: 400px; height: 400px;
-    background: radial-gradient(circle, #67e8f9, #34d399);
-    top: 30%; right: -80px;
-    animation-delay: 2s;
-  }
-
-  .blob3 {
-    width: 350px; height: 350px;
-    background: radial-gradient(circle, #fda4af, #fb923c);
-    bottom: -80px; left: 30%;
-    animation-delay: 4s;
-  }
-
-  .blob4 {
-    width: 300px; height: 300px;
-    background: radial-gradient(circle, #a5f3fc, #6ee7b7);
-    top: 60%; left: 10%;
-    animation-delay: 1s;
-  }
+  .blob1 { width: 500px; height: 500px; background: radial-gradient(circle, #c084fc, #818cf8); top: -100px; left: -100px; animation-delay: 0s; }
+  .blob2 { width: 400px; height: 400px; background: radial-gradient(circle, #67e8f9, #34d399); top: 30%; right: -80px; animation-delay: 2s; }
+  .blob3 { width: 350px; height: 350px; background: radial-gradient(circle, #fda4af, #fb923c); bottom: -80px; left: 30%; animation-delay: 4s; }
+  .blob4 { width: 300px; height: 300px; background: radial-gradient(circle, #a5f3fc, #6ee7b7); top: 60%; left: 10%; animation-delay: 1s; }
 
   @keyframes blobFloat {
     0%, 100% { transform: translate(0, 0) scale(1); }
@@ -61,23 +77,19 @@
     66% { transform: translate(-15px, 15px) scale(0.95); }
   }
 
-  .container {
-    max-width: 680px;
-    margin: 0 auto;
-    position: relative;
-    z-index: 1;
-  }
+  .container { max-width: 680px; margin: 0 auto; position: relative; z-index: 1; }
 
   /* Header */
   .header {
     text-align: center;
-    padding: 20px 0 32px;
+    padding: 20px 0 28px;
+    position: relative;
   }
 
   .header-icon {
-    font-size: 3.5rem;
+    font-size: 3rem;
     display: block;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     animation: iconPulse 3s ease-in-out infinite;
   }
 
@@ -87,33 +99,136 @@
   }
 
   .header h1 {
-    font-size: 2.8rem;
+    font-size: 2.6rem;
     font-weight: 900;
-    background: linear-gradient(135deg, #ffffff, #e0c3fc, #8ec5fc);
+    background: linear-gradient(135deg, #c084fc, #818cf8, #67e8f9);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     letter-spacing: -1px;
-    line-height: 1.1;
     margin-bottom: 8px;
   }
 
   .header p {
-    color: rgba(255,255,255,0.5);
-    font-size: 0.85rem;
-    font-weight: 500;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-weight: 600;
     letter-spacing: 2px;
     text-transform: uppercase;
   }
 
-  /* Glass mixin */
+  /* Theme Toggle */
+  .theme-toggle {
+    position: absolute;
+    top: 24px;
+    right: 0;
+    background: var(--toggle-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 50px;
+    padding: 8px 14px;
+    cursor: pointer;
+    font-size: 18px;
+    backdrop-filter: blur(10px);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .theme-toggle:hover { transform: scale(1.05); }
+  .theme-toggle span { font-size: 12px; font-weight: 600; color: var(--text-muted); }
+
+  /* Glass */
   .glass {
-    background: rgba(255,255,255,0.08);
+    background: var(--glass-bg);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(255,255,255,0.18);
+    border: 1px solid var(--glass-border);
     border-radius: 20px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.15);
+    box-shadow: var(--shadow);
+  }
+
+  /* Progress Bar */
+  .progress-section {
+    padding: 20px 22px;
+    margin-bottom: 14px;
+  }
+
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .progress-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  .progress-percent {
+    font-size: 1.4rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, #c084fc, #34d399);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .progress-bar-bg {
+    width: 100%;
+    height: 10px;
+    background: var(--progress-bg);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #c084fc, #818cf8, #34d399);
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    min-width: 0%;
+  }
+
+  .progress-bar-fill::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    animation: shimmer 2s infinite;
+  }
+
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  .progress-milestones {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .milestone {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    padding: 3px 10px;
+    border-radius: 20px;
+    background: var(--progress-bg);
+    border: 1px solid var(--glass-border);
+  }
+
+  .milestone.achieved {
+    background: rgba(52,211,153,0.15);
+    color: #34d399;
+    border-color: rgba(52,211,153,0.3);
   }
 
   /* Stats */
@@ -121,85 +236,65 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 12px;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
   }
 
   .stat-card {
-    padding: 18px 10px;
+    padding: 16px 10px;
     text-align: center;
     border-radius: 18px;
-    background: rgba(255,255,255,0.08);
+    background: var(--glass-bg);
     backdrop-filter: blur(20px);
-    border: 1px solid rgba(255,255,255,0.15);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow);
     transition: transform 0.2s;
   }
 
   .stat-card:hover { transform: translateY(-3px); }
-
-  .stat-card .num {
-    font-size: 2rem;
-    font-weight: 900;
-    line-height: 1;
-    margin-bottom: 6px;
-  }
-
-  .stat-card .label {
-    font-size: 0.7rem;
-    color: rgba(255,255,255,0.5);
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-
+  .stat-card .num { font-size: 1.9rem; font-weight: 900; line-height: 1; margin-bottom: 5px; }
+  .stat-card .label { font-size: 0.68rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
   .stat-card.total .num { color: #c084fc; }
   .stat-card.done .num { color: #34d399; }
   .stat-card.pending .num { color: #fb923c; }
   .stat-card.high .num { color: #f87171; }
 
   /* Add section */
-  .add-section {
-    padding: 24px;
-    margin-bottom: 16px;
-  }
+  .add-section { padding: 22px; margin-bottom: 14px; }
 
   .section-title {
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     font-weight: 700;
-    color: rgba(255,255,255,0.4);
+    color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 2px;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
   }
 
-  .task-input-row {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 12px;
-  }
+  .task-input-row { display: flex; gap: 10px; margin-bottom: 12px; }
 
   .task-input-row input {
     flex: 1;
     padding: 14px 18px;
     border-radius: 14px;
-    border: 1.5px solid rgba(255,255,255,0.15);
-    background: rgba(255,255,255,0.07);
+    border: 1.5px solid var(--input-border);
+    background: var(--input-bg);
     font-size: 15px;
-    color: white;
+    color: var(--text);
     outline: none;
     transition: all 0.2s;
+    backdrop-filter: blur(10px);
   }
 
   .task-input-row input:focus {
     border-color: #c084fc;
-    background: rgba(192,132,252,0.1);
+    background: var(--input-focus);
     box-shadow: 0 0 0 3px rgba(192,132,252,0.15);
   }
 
-  .task-input-row input::placeholder { color: rgba(255,255,255,0.3); }
+  .task-input-row input::placeholder { color: var(--text-muted); }
 
   .add-btn {
-    padding: 14px 24px;
+    padding: 14px 22px;
     border-radius: 14px;
     border: none;
     background: linear-gradient(135deg, #c084fc, #818cf8);
@@ -212,46 +307,37 @@
     white-space: nowrap;
   }
 
-  .add-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 25px rgba(192,132,252,0.6);
-  }
+  .add-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(192,132,252,0.6); }
 
-  .meta-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
+  .meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
   .meta-grid select,
   .meta-grid input[type="text"],
   .meta-grid input[type="date"] {
     padding: 11px 14px;
     border-radius: 12px;
-    border: 1.5px solid rgba(255,255,255,0.12);
-    background: rgba(255,255,255,0.07);
+    border: 1.5px solid var(--input-border);
+    background: var(--input-bg);
     font-size: 13px;
-    color: white;
+    color: var(--text);
     outline: none;
     transition: all 0.2s;
     width: 100%;
+    backdrop-filter: blur(10px);
   }
 
-  .meta-grid select:focus,
-  .meta-grid input:focus {
+  .meta-grid select:focus, .meta-grid input:focus {
     border-color: #c084fc;
-    background: rgba(192,132,252,0.1);
+    background: var(--input-focus);
   }
 
-  .meta-grid select option { background: #1a1a2e; color: white; }
-  input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.5; }
+  [data-theme="dark"] .meta-grid select option { background: #1a1a2e; color: white; }
+  [data-theme="light"] .meta-grid select option { background: white; color: #1a1a2e; }
+  input[type="date"]::-webkit-calendar-picker-indicator { opacity: 0.5; }
+  [data-theme="dark"] input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); }
 
-  /* Todo cards */
-  .todos-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
+  /* Todos */
+  .todos-list { display: flex; flex-direction: column; gap: 10px; }
 
   .todo-card {
     padding: 18px 20px;
@@ -268,22 +354,17 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-  .todo-card:hover {
-    transform: translateX(4px);
-    background: rgba(255,255,255,0.12) !important;
-  }
-
+  .todo-card:hover { transform: translateX(4px); background: var(--glass-hover) !important; }
   .todo-card.priority-high { border-left-color: #f87171; }
   .todo-card.priority-medium { border-left-color: #818cf8; }
   .todo-card.priority-low { border-left-color: #34d399; }
   .todo-card.done { opacity: 0.45; }
 
   .checkbox {
-    width: 28px;
-    height: 28px;
+    width: 28px; height: 28px;
     border-radius: 50%;
-    border: 2px solid rgba(255,255,255,0.25);
-    background: rgba(255,255,255,0.05);
+    border: 2px solid var(--glass-border);
+    background: var(--input-bg);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -306,21 +387,14 @@
   .todo-text {
     font-size: 15px;
     font-weight: 600;
-    color: rgba(255,255,255,0.9);
+    color: var(--todo-text);
     margin-bottom: 7px;
     word-break: break-word;
   }
 
-  .todo-card.done .todo-text {
-    text-decoration: line-through;
-    color: rgba(255,255,255,0.3);
-  }
+  .todo-card.done .todo-text { text-decoration: line-through; color: var(--todo-done); }
 
-  .todo-meta {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-  }
+  .todo-meta { display: flex; gap: 6px; flex-wrap: wrap; }
 
   .badge {
     padding: 3px 10px;
@@ -337,8 +411,7 @@
   .badge.overdue { background: rgba(248,113,113,0.2); color: #f87171; border: 1px solid rgba(248,113,113,0.3); }
 
   .delete-btn {
-    width: 34px;
-    height: 34px;
+    width: 34px; height: 34px;
     border-radius: 10px;
     border: 1px solid rgba(248,113,113,0.25);
     background: rgba(248,113,113,0.1);
@@ -352,24 +425,15 @@
     flex-shrink: 0;
   }
 
-  .delete-btn:hover {
-    background: rgba(248,113,113,0.25);
-    transform: scale(1.1);
-  }
+  .delete-btn:hover { background: rgba(248,113,113,0.25); transform: scale(1.1); }
 
-  .empty {
-    text-align: center;
-    padding: 60px 0;
-    color: rgba(255,255,255,0.3);
-  }
-
+  .empty { text-align: center; padding: 60px 0; color: var(--text-muted); }
   .empty span { font-size: 4rem; display: block; margin-bottom: 12px; }
   .empty p { font-size: 1rem; font-weight: 500; }
 </style>
 </head>
 <body>
 
-<!-- Animated background blobs -->
 <div class="blob blob1"></div>
 <div class="blob blob2"></div>
 <div class="blob blob3"></div>
@@ -378,11 +442,32 @@
 <div class="container">
 
   <div class="header">
+    <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">
+      🌙 <span>Dark</span>
+    </button>
     <span class="header-icon">✨</span>
     <h1>My DevOps Todo</h1>
     <p>Node.js • Docker • Kubernetes • Jenkins</p>
   </div>
 
+  <!-- Progress Bar -->
+  <div class="glass progress-section">
+    <div class="progress-header">
+      <span class="progress-label">📊 Overall Progress</span>
+      <span class="progress-percent" id="progressPercent">0%</span>
+    </div>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progressBar" style="width: 0%"></div>
+    </div>
+    <div class="progress-milestones">
+      <span class="milestone" id="m25">🎯 25%</span>
+      <span class="milestone" id="m50">🔥 50%</span>
+      <span class="milestone" id="m75">⚡ 75%</span>
+      <span class="milestone" id="m100">🏆 100%</span>
+    </div>
+  </div>
+
+  <!-- Stats -->
   <div class="stats-row">
     <div class="stat-card total">
       <div class="num" id="totalCount">0</div>
@@ -402,6 +487,7 @@
     </div>
   </div>
 
+  <!-- Add Task -->
   <div class="glass add-section">
     <div class="section-title">➕ Add New Task</div>
     <div class="task-input-row">
@@ -431,6 +517,32 @@
 
 <script>
 let allTodos = [];
+let currentTheme = 'dark';
+
+function toggleTheme() {
+  currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', currentTheme);
+  const btn = document.getElementById('themeBtn');
+  btn.innerHTML = currentTheme === 'dark'
+    ? '🌙 <span>Dark</span>'
+    : '☀️ <span>Light</span>';
+}
+
+function updateProgress(todos) {
+  const total = todos.length;
+  const done = todos.filter(t => t.done).length;
+  const pct = total === 0 ? 0 : Math.round((done / total) * 100);
+
+  document.getElementById('progressPercent').textContent = pct + '%';
+  document.getElementById('progressBar').style.width = pct + '%';
+
+  // Milestones
+  ['m25', 'm50', 'm75', 'm100'].forEach((id, i) => {
+    const threshold = [25, 50, 75, 100][i];
+    const el = document.getElementById(id);
+    el.classList.toggle('achieved', pct >= threshold);
+  });
+}
 
 async function fetchTodos() {
   const res = await fetch('/api/todos');
@@ -459,6 +571,8 @@ function renderTodos() {
   document.getElementById('doneCount').textContent = allTodos.filter(t => t.done).length;
   document.getElementById('pendingCount').textContent = allTodos.filter(t => !t.done).length;
   document.getElementById('highCount').textContent = allTodos.filter(t => t.priority === 'high' && !t.done).length;
+
+  updateProgress(allTodos);
 
   const list = document.getElementById('todoList');
 
