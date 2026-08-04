@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <title>My DevOps Todo App</title>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; transition: background 0.3s, color 0.3s; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
-  /* Dark theme (default) */
-  [data-theme="dark"] {
+  :root {
     --bg: #0a0a1a;
     --text: rgba(255,255,255,0.9);
     --text-muted: rgba(255,255,255,0.4);
@@ -20,26 +19,11 @@
     --todo-text: rgba(255,255,255,0.9);
     --todo-done: rgba(255,255,255,0.3);
     --shadow: 0 8px 32px rgba(0,0,0,0.3);
-    --toggle-bg: rgba(255,255,255,0.1);
     --progress-bg: rgba(255,255,255,0.1);
-  }
-
-  /* Light theme */
-  [data-theme="light"] {
-    --bg: #f0f4ff;
-    --text: #1a1a2e;
-    --text-muted: rgba(0,0,0,0.45);
-    --glass-bg: rgba(255,255,255,0.45);
-    --glass-border: rgba(255,255,255,0.7);
-    --glass-hover: rgba(255,255,255,0.65);
-    --input-bg: rgba(255,255,255,0.6);
-    --input-border: rgba(0,0,0,0.1);
-    --input-focus: rgba(108,99,255,0.08);
-    --todo-text: #1a1a2e;
-    --todo-done: rgba(0,0,0,0.3);
-    --shadow: 0 8px 32px rgba(0,0,0,0.1);
-    --toggle-bg: rgba(0,0,0,0.08);
-    --progress-bg: rgba(0,0,0,0.08);
+    --blob-opacity: 0.55;
+    --select-bg: #1a1a2e;
+    --select-color: white;
+    --cal-filter: invert(1);
   }
 
   body {
@@ -50,21 +34,19 @@
     color: var(--text);
     overflow-x: hidden;
     position: relative;
+    transition: background 0.4s ease, color 0.4s ease;
   }
 
-  /* Animated background blobs */
   .blob {
     position: fixed;
     border-radius: 50%;
     filter: blur(80px);
-    opacity: 0.55;
+    opacity: var(--blob-opacity);
     animation: blobFloat 8s ease-in-out infinite;
     z-index: 0;
     pointer-events: none;
-    transition: opacity 0.3s;
+    transition: opacity 0.4s;
   }
-
-  [data-theme="light"] .blob { opacity: 0.35; }
 
   .blob1 { width: 500px; height: 500px; background: radial-gradient(circle, #c084fc, #818cf8); top: -100px; left: -100px; animation-delay: 0s; }
   .blob2 { width: 400px; height: 400px; background: radial-gradient(circle, #67e8f9, #34d399); top: 30%; right: -80px; animation-delay: 2s; }
@@ -79,12 +61,7 @@
 
   .container { max-width: 680px; margin: 0 auto; position: relative; z-index: 1; }
 
-  /* Header */
-  .header {
-    text-align: center;
-    padding: 20px 0 28px;
-    position: relative;
-  }
+  .header { text-align: center; padding: 20px 0 28px; position: relative; }
 
   .header-icon {
     font-size: 3rem;
@@ -109,36 +86,29 @@
     margin-bottom: 8px;
   }
 
-  .header p {
-    color: var(--text-muted);
-    font-size: 0.8rem;
-    font-weight: 600;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-  }
+  .header p { color: var(--text-muted); font-size: 0.8rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; transition: color 0.4s; }
 
-  /* Theme Toggle */
   .theme-toggle {
     position: absolute;
     top: 24px;
     right: 0;
-    background: var(--toggle-bg);
+    background: var(--glass-bg);
     border: 1px solid var(--glass-border);
     border-radius: 50px;
-    padding: 8px 14px;
+    padding: 8px 16px;
     cursor: pointer;
-    font-size: 18px;
+    font-size: 16px;
     backdrop-filter: blur(10px);
-    transition: all 0.2s;
+    transition: all 0.3s;
     display: flex;
     align-items: center;
     gap: 6px;
+    color: var(--text);
   }
 
-  .theme-toggle:hover { transform: scale(1.05); }
-  .theme-toggle span { font-size: 12px; font-weight: 600; color: var(--text-muted); }
+  .theme-toggle:hover { transform: scale(1.05); background: var(--glass-hover); }
+  .theme-toggle .toggle-label { font-size: 12px; font-weight: 600; }
 
-  /* Glass */
   .glass {
     background: var(--glass-bg);
     backdrop-filter: blur(24px);
@@ -146,28 +116,15 @@
     border: 1px solid var(--glass-border);
     border-radius: 20px;
     box-shadow: var(--shadow);
+    transition: background 0.4s, border-color 0.4s, box-shadow 0.4s;
   }
 
-  /* Progress Bar */
-  .progress-section {
-    padding: 20px 22px;
-    margin-bottom: 14px;
-  }
+  /* Progress */
+  .progress-section { padding: 20px 22px; margin-bottom: 14px; }
 
-  .progress-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
-  }
+  .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
 
-  .progress-label {
-    font-size: 0.72rem;
-    font-weight: 700;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 2px;
-  }
+  .progress-label { font-size: 0.72rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; transition: color 0.4s; }
 
   .progress-percent {
     font-size: 1.4rem;
@@ -178,14 +135,7 @@
     background-clip: text;
   }
 
-  .progress-bar-bg {
-    width: 100%;
-    height: 10px;
-    background: var(--progress-bg);
-    border-radius: 10px;
-    overflow: hidden;
-    margin-bottom: 10px;
-  }
+  .progress-bar-bg { width: 100%; height: 10px; background: var(--progress-bg); border-radius: 10px; overflow: hidden; margin-bottom: 10px; transition: background 0.4s; }
 
   .progress-bar-fill {
     height: 100%;
@@ -193,7 +143,7 @@
     background: linear-gradient(90deg, #c084fc, #818cf8, #34d399);
     transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
-    min-width: 0%;
+    overflow: hidden;
   }
 
   .progress-bar-fill::after {
@@ -209,50 +159,30 @@
     100% { transform: translateX(100%); }
   }
 
-  .progress-milestones {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
+  .progress-milestones { display: flex; gap: 8px; flex-wrap: wrap; }
 
   .milestone {
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--text-muted);
-    padding: 3px 10px;
-    border-radius: 20px;
-    background: var(--progress-bg);
-    border: 1px solid var(--glass-border);
+    font-size: 11px; font-weight: 600; color: var(--text-muted);
+    padding: 3px 10px; border-radius: 20px;
+    background: var(--progress-bg); border: 1px solid var(--glass-border);
+    transition: all 0.3s;
   }
 
-  .milestone.achieved {
-    background: rgba(52,211,153,0.15);
-    color: #34d399;
-    border-color: rgba(52,211,153,0.3);
-  }
+  .milestone.achieved { background: rgba(52,211,153,0.15); color: #34d399; border-color: rgba(52,211,153,0.3); }
 
   /* Stats */
-  .stats-row {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-    margin-bottom: 14px;
-  }
+  .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 14px; }
 
   .stat-card {
-    padding: 16px 10px;
-    text-align: center;
-    border-radius: 18px;
-    background: var(--glass-bg);
-    backdrop-filter: blur(20px);
-    border: 1px solid var(--glass-border);
-    box-shadow: var(--shadow);
-    transition: transform 0.2s;
+    padding: 16px 10px; text-align: center; border-radius: 18px;
+    background: var(--glass-bg); backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border); box-shadow: var(--shadow);
+    transition: transform 0.2s, background 0.4s, border-color 0.4s;
   }
 
   .stat-card:hover { transform: translateY(-3px); }
   .stat-card .num { font-size: 1.9rem; font-weight: 900; line-height: 1; margin-bottom: 5px; }
-  .stat-card .label { font-size: 0.68rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+  .stat-card .label { font-size: 0.68rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; transition: color 0.4s; }
   .stat-card.total .num { color: #c084fc; }
   .stat-card.done .num { color: #34d399; }
   .stat-card.pending .num { color: #fb923c; }
@@ -261,50 +191,27 @@
   /* Add section */
   .add-section { padding: 22px; margin-bottom: 14px; }
 
-  .section-title {
-    font-size: 0.7rem;
-    font-weight: 700;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 14px;
-  }
+  .section-title { font-size: 0.7rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; transition: color 0.4s; }
 
   .task-input-row { display: flex; gap: 10px; margin-bottom: 12px; }
 
   .task-input-row input {
-    flex: 1;
-    padding: 14px 18px;
-    border-radius: 14px;
+    flex: 1; padding: 14px 18px; border-radius: 14px;
     border: 1.5px solid var(--input-border);
-    background: var(--input-bg);
-    font-size: 15px;
-    color: var(--text);
-    outline: none;
-    transition: all 0.2s;
+    background: var(--input-bg); font-size: 15px;
+    color: var(--text); outline: none; transition: all 0.3s;
     backdrop-filter: blur(10px);
   }
 
-  .task-input-row input:focus {
-    border-color: #c084fc;
-    background: var(--input-focus);
-    box-shadow: 0 0 0 3px rgba(192,132,252,0.15);
-  }
-
+  .task-input-row input:focus { border-color: #c084fc; background: var(--input-focus); box-shadow: 0 0 0 3px rgba(192,132,252,0.15); }
   .task-input-row input::placeholder { color: var(--text-muted); }
 
   .add-btn {
-    padding: 14px 22px;
-    border-radius: 14px;
-    border: none;
+    padding: 14px 22px; border-radius: 14px; border: none;
     background: linear-gradient(135deg, #c084fc, #818cf8);
-    color: white;
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.25s;
-    box-shadow: 0 4px 20px rgba(192,132,252,0.4);
-    white-space: nowrap;
+    color: white; font-size: 15px; font-weight: 700;
+    cursor: pointer; transition: all 0.25s;
+    box-shadow: 0 4px 20px rgba(192,132,252,0.4); white-space: nowrap;
   }
 
   .add-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(192,132,252,0.6); }
@@ -314,38 +221,22 @@
   .meta-grid select,
   .meta-grid input[type="text"],
   .meta-grid input[type="date"] {
-    padding: 11px 14px;
-    border-radius: 12px;
+    padding: 11px 14px; border-radius: 12px;
     border: 1.5px solid var(--input-border);
-    background: var(--input-bg);
-    font-size: 13px;
-    color: var(--text);
-    outline: none;
-    transition: all 0.2s;
-    width: 100%;
-    backdrop-filter: blur(10px);
+    background: var(--input-bg); font-size: 13px;
+    color: var(--text); outline: none; transition: all 0.3s; width: 100%;
   }
 
-  .meta-grid select:focus, .meta-grid input:focus {
-    border-color: #c084fc;
-    background: var(--input-focus);
-  }
-
-  [data-theme="dark"] .meta-grid select option { background: #1a1a2e; color: white; }
-  [data-theme="light"] .meta-grid select option { background: white; color: #1a1a2e; }
-  input[type="date"]::-webkit-calendar-picker-indicator { opacity: 0.5; }
-  [data-theme="dark"] input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); }
+  .meta-grid select option { background: var(--select-bg); color: var(--select-color); }
+  .meta-grid select:focus, .meta-grid input:focus { border-color: #c084fc; background: var(--input-focus); }
+  input[type="date"]::-webkit-calendar-picker-indicator { filter: var(--cal-filter); opacity: 0.5; }
 
   /* Todos */
   .todos-list { display: flex; flex-direction: column; gap: 10px; }
 
   .todo-card {
-    padding: 18px 20px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    border-left: 4px solid transparent;
-    transition: all 0.25s;
+    padding: 18px 20px; display: flex; align-items: center; gap: 16px;
+    border-left: 4px solid transparent; transition: all 0.25s;
     animation: fadeIn 0.3s ease;
   }
 
@@ -361,48 +252,21 @@
   .todo-card.done { opacity: 0.45; }
 
   .checkbox {
-    width: 28px; height: 28px;
-    border-radius: 50%;
-    border: 2px solid var(--glass-border);
-    background: var(--input-bg);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    font-weight: 700;
-    color: white;
-    transition: all 0.2s;
-    flex-shrink: 0;
+    width: 28px; height: 28px; border-radius: 50%;
+    border: 2px solid var(--glass-border); background: var(--input-bg);
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; color: var(--text);
+    transition: all 0.2s; flex-shrink: 0;
   }
 
-  .checkbox.checked {
-    background: linear-gradient(135deg, #34d399, #06b6d4);
-    border-color: transparent;
-    box-shadow: 0 2px 12px rgba(52,211,153,0.5);
-  }
+  .checkbox.checked { background: linear-gradient(135deg, #34d399, #06b6d4); border-color: transparent; box-shadow: 0 2px 12px rgba(52,211,153,0.5); color: white; }
 
   .todo-content { flex: 1; min-width: 0; }
-
-  .todo-text {
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--todo-text);
-    margin-bottom: 7px;
-    word-break: break-word;
-  }
-
+  .todo-text { font-size: 15px; font-weight: 600; color: var(--todo-text); margin-bottom: 7px; word-break: break-word; transition: color 0.4s; }
   .todo-card.done .todo-text { text-decoration: line-through; color: var(--todo-done); }
-
   .todo-meta { display: flex; gap: 6px; flex-wrap: wrap; }
 
-  .badge {
-    padding: 3px 10px;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: 700;
-  }
-
+  .badge { padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
   .badge.high { background: rgba(248,113,113,0.2); color: #f87171; border: 1px solid rgba(248,113,113,0.3); }
   .badge.medium { background: rgba(129,140,248,0.2); color: #818cf8; border: 1px solid rgba(129,140,248,0.3); }
   .badge.low { background: rgba(52,211,153,0.2); color: #34d399; border: 1px solid rgba(52,211,153,0.3); }
@@ -411,23 +275,16 @@
   .badge.overdue { background: rgba(248,113,113,0.2); color: #f87171; border: 1px solid rgba(248,113,113,0.3); }
 
   .delete-btn {
-    width: 34px; height: 34px;
-    border-radius: 10px;
-    border: 1px solid rgba(248,113,113,0.25);
-    background: rgba(248,113,113,0.1);
-    color: #f87171;
-    font-size: 15px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-    flex-shrink: 0;
+    width: 34px; height: 34px; border-radius: 10px;
+    border: 1px solid rgba(248,113,113,0.25); background: rgba(248,113,113,0.1);
+    color: #f87171; font-size: 15px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s; flex-shrink: 0;
   }
 
   .delete-btn:hover { background: rgba(248,113,113,0.25); transform: scale(1.1); }
 
-  .empty { text-align: center; padding: 60px 0; color: var(--text-muted); }
+  .empty { text-align: center; padding: 60px 0; color: var(--text-muted); transition: color 0.4s; }
   .empty span { font-size: 4rem; display: block; margin-bottom: 12px; }
   .empty p { font-size: 1rem; font-weight: 500; }
 </style>
@@ -440,17 +297,15 @@
 <div class="blob blob4"></div>
 
 <div class="container">
-
   <div class="header">
     <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">
-      🌙 <span>Dark</span>
+      🌙 <span class="toggle-label">Dark</span>
     </button>
     <span class="header-icon">✨</span>
     <h1>My DevOps Todo</h1>
     <p>Node.js • Docker • Kubernetes • Jenkins</p>
   </div>
 
-  <!-- Progress Bar -->
   <div class="glass progress-section">
     <div class="progress-header">
       <span class="progress-label">📊 Overall Progress</span>
@@ -467,27 +322,13 @@
     </div>
   </div>
 
-  <!-- Stats -->
   <div class="stats-row">
-    <div class="stat-card total">
-      <div class="num" id="totalCount">0</div>
-      <div class="label">Total</div>
-    </div>
-    <div class="stat-card done">
-      <div class="num" id="doneCount">0</div>
-      <div class="label">Done</div>
-    </div>
-    <div class="stat-card pending">
-      <div class="num" id="pendingCount">0</div>
-      <div class="label">Pending</div>
-    </div>
-    <div class="stat-card high">
-      <div class="num" id="highCount">0</div>
-      <div class="label">High 🔴</div>
-    </div>
+    <div class="stat-card total"><div class="num" id="totalCount">0</div><div class="label">Total</div></div>
+    <div class="stat-card done"><div class="num" id="doneCount">0</div><div class="label">Done</div></div>
+    <div class="stat-card pending"><div class="num" id="pendingCount">0</div><div class="label">Pending</div></div>
+    <div class="stat-card high"><div class="num" id="highCount">0</div><div class="label">High 🔴</div></div>
   </div>
 
-  <!-- Add Task -->
   <div class="glass add-section">
     <div class="section-title">➕ Add New Task</div>
     <div class="task-input-row">
@@ -512,37 +353,76 @@
   </div>
 
   <div class="todos-list" id="todoList"></div>
-
 </div>
 
 <script>
 let allTodos = [];
-let currentTheme = 'dark';
+let isDark = true;
+
+const darkVars = {
+  '--bg': '#0a0a1a',
+  '--text': 'rgba(255,255,255,0.9)',
+  '--text-muted': 'rgba(255,255,255,0.4)',
+  '--glass-bg': 'rgba(255,255,255,0.08)',
+  '--glass-border': 'rgba(255,255,255,0.15)',
+  '--glass-hover': 'rgba(255,255,255,0.12)',
+  '--input-bg': 'rgba(255,255,255,0.07)',
+  '--input-border': 'rgba(255,255,255,0.12)',
+  '--input-focus': 'rgba(192,132,252,0.1)',
+  '--todo-text': 'rgba(255,255,255,0.9)',
+  '--todo-done': 'rgba(255,255,255,0.3)',
+  '--shadow': '0 8px 32px rgba(0,0,0,0.3)',
+  '--progress-bg': 'rgba(255,255,255,0.1)',
+  '--blob-opacity': '0.55',
+  '--select-bg': '#1a1a2e',
+  '--select-color': 'white',
+  '--cal-filter': 'invert(1)',
+};
+
+const lightVars = {
+  '--bg': '#f0f4ff',
+  '--text': '#1a1a2e',
+  '--text-muted': 'rgba(0,0,0,0.45)',
+  '--glass-bg': 'rgba(255,255,255,0.5)',
+  '--glass-border': 'rgba(255,255,255,0.8)',
+  '--glass-hover': 'rgba(255,255,255,0.7)',
+  '--input-bg': 'rgba(255,255,255,0.65)',
+  '--input-border': 'rgba(0,0,0,0.1)',
+  '--input-focus': 'rgba(108,99,255,0.08)',
+  '--todo-text': '#1a1a2e',
+  '--todo-done': 'rgba(0,0,0,0.3)',
+  '--shadow': '0 8px 32px rgba(0,0,0,0.1)',
+  '--progress-bg': 'rgba(0,0,0,0.08)',
+  '--blob-opacity': '0.3',
+  '--select-bg': 'white',
+  '--select-color': '#1a1a2e',
+  '--cal-filter': 'none',
+};
+
+function applyTheme(vars) {
+  const root = document.documentElement;
+  Object.entries(vars).forEach(([key, val]) => {
+    root.style.setProperty(key, val);
+  });
+}
 
 function toggleTheme() {
-  currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
-  document.documentElement.setAttribute('data-theme', currentTheme);
-  document.body.setAttribute('data-theme', currentTheme);
-  document.body.setAttribute('data-theme', currentTheme);
+  isDark = !isDark;
+  applyTheme(isDark ? darkVars : lightVars);
   const btn = document.getElementById('themeBtn');
-  btn.innerHTML = currentTheme === 'dark'
-    ? '🌙 <span>Dark</span>'
-    : '☀️ <span>Light</span>';
+  btn.innerHTML = isDark
+    ? '🌙 <span class="toggle-label">Dark</span>'
+    : '☀️ <span class="toggle-label">Light</span>';
 }
 
 function updateProgress(todos) {
   const total = todos.length;
   const done = todos.filter(t => t.done).length;
   const pct = total === 0 ? 0 : Math.round((done / total) * 100);
-
   document.getElementById('progressPercent').textContent = pct + '%';
   document.getElementById('progressBar').style.width = pct + '%';
-
-  // Milestones
-  ['m25', 'm50', 'm75', 'm100'].forEach((id, i) => {
-    const threshold = [25, 50, 75, 100][i];
-    const el = document.getElementById(id);
-    el.classList.toggle('achieved', pct >= threshold);
+  [['m25',25],['m50',50],['m75',75],['m100',100]].forEach(([id, threshold]) => {
+    document.getElementById(id).classList.toggle('achieved', pct >= threshold);
   });
 }
 
@@ -555,7 +435,6 @@ async function fetchTodos() {
 function renderTodos() {
   const filter = document.getElementById('filterSelect').value;
   let todos = [...allTodos];
-
   if (filter === 'pending') todos = todos.filter(t => !t.done);
   else if (filter === 'done') todos = todos.filter(t => t.done);
   else if (filter === 'high') todos = todos.filter(t => t.priority === 'high');
@@ -573,11 +452,9 @@ function renderTodos() {
   document.getElementById('doneCount').textContent = allTodos.filter(t => t.done).length;
   document.getElementById('pendingCount').textContent = allTodos.filter(t => !t.done).length;
   document.getElementById('highCount').textContent = allTodos.filter(t => t.priority === 'high' && !t.done).length;
-
   updateProgress(allTodos);
 
   const list = document.getElementById('todoList');
-
   if (todos.length === 0) {
     list.innerHTML = '<div class="glass empty"><span>🎯</span><p>No tasks yet! Add one above.</p></div>';
     return;
@@ -587,27 +464,18 @@ function renderTodos() {
   todos.forEach(todo => {
     const card = document.createElement('div');
     card.className = `glass todo-card priority-${todo.priority} ${todo.done ? 'done' : ''}`;
-
     const today = new Date().toISOString().split('T')[0];
     let dueBadge = '';
     if (todo.dueDate) {
       const overdue = !todo.done && todo.dueDate < today;
-      dueBadge = `<span class="badge ${overdue ? 'overdue' : 'due'}">
-        ${overdue ? '⚠️ Overdue' : '📅'} ${todo.dueDate}
-      </span>`;
+      dueBadge = `<span class="badge ${overdue ? 'overdue' : 'due'}">${overdue ? '⚠️ Overdue' : '📅'} ${todo.dueDate}</span>`;
     }
-
     card.innerHTML = `
-      <div class="checkbox ${todo.done ? 'checked' : ''}" onclick="toggleTodo(${todo.id}, ${!todo.done})">
-        ${todo.done ? '✓' : ''}
-      </div>
+      <div class="checkbox ${todo.done ? 'checked' : ''}" onclick="toggleTodo(${todo.id}, ${!todo.done})">${todo.done ? '✓' : ''}</div>
       <div class="todo-content">
         <div class="todo-text">${todo.text}</div>
         <div class="todo-meta">
-          <span class="badge ${todo.priority}">${
-            todo.priority === 'high' ? '🔴 High' :
-            todo.priority === 'medium' ? '🔵 Medium' : '🟢 Low'
-          }</span>
+          <span class="badge ${todo.priority}">${todo.priority === 'high' ? '🔴 High' : todo.priority === 'medium' ? '🔵 Medium' : '🟢 Low'}</span>
           ${todo.category ? `<span class="badge category">📁 ${todo.category}</span>` : ''}
           ${dueBadge}
         </div>
@@ -654,6 +522,8 @@ document.getElementById('todoInput').addEventListener('keypress', e => {
   if (e.key === 'Enter') addTodo();
 });
 
+// Apply dark theme on load
+applyTheme(darkVars);
 fetchTodos();
 </script>
 </body>
