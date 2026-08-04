@@ -21,3 +21,4 @@ Test build after docker fix
 29-july-test
 final test of 31-july
 test on 4th aug
+dark/light theme failed
