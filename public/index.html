@@ -375,9 +375,14 @@ function applyTheme(vars) {
 }
 
 function toggleTheme() {
-  document.body.style.background = isDark ? lightVars['--bg'] : darkVars['--bg'];
   isDark = !isDark;
-  applyTheme(isDark ? darkVars : lightVars);
+  const vars = isDark ? darkVars : lightVars;
+  applyTheme(vars);
+  document.body.style.background = vars['--bg'];
+  document.body.style.color = vars['--text'];
+  document.querySelectorAll('.blob').forEach(b => {
+    b.style.opacity = vars['--blob-opacity'];
+  });
   document.getElementById('themeBtn').innerHTML = isDark
     ? '🌙 <span class="toggle-label">Dark</span>'
     : '☀️ <span class="toggle-label">Light</span>';
