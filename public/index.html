@@ -372,6 +372,15 @@ const lightVars = {
 
 function applyTheme(vars) {
   Object.entries(vars).forEach(([k,v]) => document.documentElement.style.setProperty(k,v));
+  document.body.style.setProperty('background', vars['--bg'], 'important');
+  document.body.style.setProperty('color', vars['--text'], 'important');
+  document.querySelectorAll('.glass').forEach(el => {
+    el.style.setProperty('background', vars['--glass-bg'], 'important');
+    el.style.setProperty('border-color', vars['--glass-border'], 'important');
+  });
+  document.querySelectorAll('.blob').forEach(b => {
+    b.style.opacity = vars['--blob-opacity'];
+  });
 }
 
 function toggleTheme() {
