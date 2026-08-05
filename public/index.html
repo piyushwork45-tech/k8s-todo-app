@@ -375,6 +375,7 @@ function applyTheme(vars) {
 }
 
 function toggleTheme() {
+  document.body.style.background = isDark ? lightVars['--bg'] : darkVars['--bg'];
   isDark = !isDark;
   applyTheme(isDark ? darkVars : lightVars);
   document.getElementById('themeBtn').innerHTML = isDark
