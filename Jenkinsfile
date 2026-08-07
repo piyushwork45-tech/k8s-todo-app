@@ -41,6 +41,7 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 sh "kubectl apply -f k8s/pvc.yaml"
+		sh "kubectl apply -f k8s/ingress.yaml"
                 sh "kubectl apply -f k8s/deployment.yaml"
                 sh "kubectl apply -f k8s/service.yaml"
                 sh "kubectl set image deployment/todo-app todo-app=${IMAGE_NAME}:${IMAGE_TAG}"
