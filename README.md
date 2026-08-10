@@ -24,3 +24,4 @@ test on 4th aug
 dark/light theme failed
 test on 6th aug
 6 aug 2nd test
+10 Aug test
