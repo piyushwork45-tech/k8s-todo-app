@@ -1,7 +1,7 @@
 {
   "name": "todo-app",
   "version": "1.0.0",
-  "description": "Simple in-memory To-Do List app with Node.js + Express",
+  "description": "Simple in-memory To-Do App List with Node.js + Express",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
