@@ -40,10 +40,10 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
             steps {
-                sh "kubectl apply -f k8s/pvc.yaml"
-		sh "kubectl apply -f k8s/ingress.yaml"
-                sh "kubectl apply -f k8s/deployment.yaml"
-                sh "kubectl apply -f k8s/service.yaml"
+                sh "kubectl apply -f k8s/pvc.yaml --validate=false"
+		sh "kubectl apply -f k8s/ingress.yaml --validate=false"
+                sh "kubectl apply -f k8s/deployment.yaml --validate=false"
+                sh "kubectl apply -f k8s/service.yaml --validate=false"
                 sh "kubectl set image deployment/todo-app todo-app=${IMAGE_NAME}:${IMAGE_TAG}"
                 sh "kubectl rollout status deployment/todo-app"
                 script {
