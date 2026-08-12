@@ -100,7 +100,7 @@ ${BUILD_URL}
             sh 'curl -s -X POST "$DISCORD_WEBHOOK" -H "Content-Type: application/json" -d @discord_payload.json'
         }
         failure {
-            mail to: 'piyush.work45@gmail.com',
+            mail to: 'piyush.test36@gmail.com',
                  subject: "❌ BUILD #${BUILD_NUMBER} FAILED — todo-app-pipeline",
                  body: """
 Hello Piyush,
