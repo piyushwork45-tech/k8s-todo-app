@@ -51,3 +51,4 @@ cicd testing
 dsfgdsfgdsvgsd
 sdcjsdjkvbdsvsdkjv
 vfhdjsfkafghgfsdgh
+# Auto deploy test
